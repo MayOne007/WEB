@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!--创建连接工厂 -->  
+	<bean id="activemqConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">  
+	   	<property name="brokerURL" value="failover://${activemq.brokerUrl}" />
+		<property name="userName" value="${activemq.username}" />
+		<property name="password" value="${activemq.password}" />
+		<property name="sendTimeout" value="${activemq.sendTimeout}" /> 
+	</bean>
+	<!-- 配置Spring的连接工厂 -->
+	<bean id="activemqPoolConnectionFactory" class="org.apache.activemq.pool.PooledConnectionFactory" destroy-method="stop">
+		<property name="connectionFactory" ref="activemqConnectionFactory" />
+	</bean>	
+	<!-- 设置 消息目的地 start -->  
+	<bean id="activemqQueueTemplate" class="org.springframework.jms.core.JmsTemplate">  
+	    <property name="connectionFactory" ref="activemqPoolConnectionFactory"></property>
+	</bean>
+	
+	<!-- 发送器 -->
+	<bean id="orderSender" class="com.activemq.sender.OrderSender" >
+		<property name="prefix" value="order" />
+	</bean> 
+	<!-- 接收处理器 -->
+	<bean id="orderReceiver" class="com.activemq.receiver.OrderReceiver"  >
+		<property name="prefix" value="order" />
+	</bean>
+
+</beans>
