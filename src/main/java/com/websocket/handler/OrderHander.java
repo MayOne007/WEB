@@ -14,7 +14,7 @@ import com.contant.SystemContant;
 public class OrderHander implements WebSocketHandler {
     private static final Logger logger = Logger.getLogger(OrderHander.class);
 
-    private static final Vector <WebSocketSession> users = new Vector <>();
+    public static final Vector <WebSocketSession> users = new Vector <>();
 
     //初次链接成功执行
     @Override
@@ -29,7 +29,7 @@ public class OrderHander implements WebSocketHandler {
 
     //接受消息处理消息
     @Override
-    public void handleMessage(WebSocketSession webSocketSession, WebSocketMessage<?> webSocketMessage) throws Exception { 
+    public void handleMessage(WebSocketSession webSocketSession, WebSocketMessage<?> webSocketMessage) throws Exception {
     	String id = (String) webSocketSession.getAttributes().get(SystemContant.WEBSOCKET_ID);
     	logger.info("接收信息..."+webSocketMessage.getPayload());
     	sendMessageToUser(id,new TextMessage(webSocketMessage.getPayload() + ""));
@@ -72,7 +72,7 @@ public class OrderHander implements WebSocketHandler {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                break;
+               // break;
             }
         }
     }
@@ -86,7 +86,7 @@ public class OrderHander implements WebSocketHandler {
     public static void sendAddMessage(String id, String message) {
     	TextMessage textMessage = new TextMessage(message);
         for (WebSocketSession user : users) {
-            if (user.getAttributes().get(SystemContant.WEBSOCKET_ID).equals(id)) {
+            //if (user.getAttributes().get(SystemContant.WEBSOCKET_ID).equals(id)) {
                 try {
                     if (user.isOpen()) {
                         user.sendMessage(textMessage);
@@ -94,8 +94,8 @@ public class OrderHander implements WebSocketHandler {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                break;
-            }
+                //break;
+            //}
         }
     }
 }

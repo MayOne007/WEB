@@ -17,10 +17,10 @@ public class OrderInterceptor implements org.springframework.web.socket.server.H
     @Override
     public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse serverHttpResponse, WebSocketHandler webSocketHandler, Map<String, Object> map) throws Exception {
     	if (request instanceof ServletServerHttpRequest) {
-            HttpServletRequest servletRequest = ((ServletServerHttpRequest) request).getServletRequest();
+            	HttpServletRequest servletRequest = ((ServletServerHttpRequest) request).getServletRequest();
             	String id = servletRequest.getSession().getId();      
                 map.put(SystemContant.WEBSOCKET_ID,id);
-                servletRequest.getSession().setAttribute(SystemContant.WEBSOCKET_ID, id); 
+                servletRequest.getSession().setAttribute(SystemContant.WEBSOCKET_ID, "111"); 
         }
         return true;
     }
